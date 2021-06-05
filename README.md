@@ -4,5 +4,5 @@
 
 
 
-![image](./example.png)
+![image](./demo-example.gif)
 
