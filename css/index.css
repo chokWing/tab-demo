@@ -1,0 +1,77 @@
+* {
+  box-sizing: border-box;
+}
+.tab-wrapper {
+  border: 1px solid #d9d9d9;
+  height: 56px;
+  line-height: 56px;
+  display: flex;
+  cursor: pointer;
+}
+.tab-list-translateX {
+  flex: 1;
+  overflow: hidden;
+}
+.tab-list {
+  display: flex;
+  transform: translateX(0);
+  transition: transform 0.3s ease;
+}
+.tab-item {
+  position: relative;
+  width: 200px;
+  height: 54px;
+  font-size: 20px;
+  text-align: left;
+  padding-left: 10px;
+  padding-right: 30px;
+  flex-shrink: 0;
+  font-weight: 600;
+}
+.tab-item:hover {
+  background: #f3f9f9;
+}
+.tab-item:after {
+  content: '';
+  width: 1px;
+  height: 25px;
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: #E5E5E5;
+}
+.tab-item .del {
+  position: absolute;
+  right: 15px;
+  top: 18px;
+}
+.tab-item.active {
+  border-bottom: 2px solid #1b918a;
+  background-color: #f3f9f9;
+}
+.left,
+.right {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 100%;
+  text-align: center;
+}
+.left.disabled,
+.right.disabled {
+  background: #D9D9D9;
+}
+.left.disabled:hover,
+.right.disabled:hover {
+  background: #D9D9D9;
+}
+.left:hover,
+.right:hover {
+  background: #f3f9f9;
+}
+.add {
+  width: 60px;
+  text-align: center;
+}

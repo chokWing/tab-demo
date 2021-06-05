@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>页签demo</title>
+  <link rel="stylesheet" href="css/index.css">
+</head>
+<body>
+  <div class="tab-wrapper">
+    <div class="left" onclick="prev()">
+      <img src="img/left.png" alt="">
+    </div>
+    <div class="tab-list-translateX">
+      <div class="tab-list" style="transform: translateX(0);">
+        <div class="tab-item active">
+          增值税发票
+          <img src="img/del.png" class="del" alt="" onclick="del">
+        </div>
+        <div class="tab-item">
+          飞机票
+          <img src="img/del.png" class="del" alt="" onclick="del">
+        </div>
+        <div class="tab-item">
+          电影票
+          <img src="img/del.png" class="del" alt="" onclick="del">
+        </div>
+      </div>
+    </div>
+    <div class="add" onclick="addTab()">
+      <img src="img/add.png" alt="">
+    </div>
+    <div class="right" onclick="next()">
+      <img src="img/right.png" alt="">
+    </div>
+  </div>
+
+  <script src="js/jquery-3.2.1.min.js"></script>
+  <script>
+    var currentX = 0 //当前translateX的值
+    var tabWidth = 200 //每个tab的宽度
+    setArrowDisabled()
+
+    function next() {
+      if(getTranslateValue() === getRemainX()) {
+        return
+      }
+      var diffX = $('.tab-list')[0].scrollWidth - $('.tab-list-translateX').width() - Math.abs(getTranslateValue())
+      currentX -= Math.min(tabWidth, diffX)
+      $('.tab-list').css('transform', `translateX(${currentX}px)`)
+      setArrowDisabled()
+    }
+    function prev() {
+      if(getTranslateValue() < 0) {
+        currentX+= Math.min(tabWidth, Math.abs(getTranslateValue()))
+        $('.tab-list').css('transform', `translateX(${currentX}px)`)
+        setArrowDisabled()
+      }
+    }
+
+    $('.tab-list').on('click','.tab-item',function(e) {
+      if(e.target.className === 'del') {
+        $(this).remove()
+        if(currentX < 0) {
+          currentX+= Math.min(tabWidth, Math.abs(getTranslateValue()))
+          $('.tab-list').css('transform', `translateX(${currentX}px)`)
+        }
+        setArrowDisabled()
+        return
+      }
+      $(this).addClass('active').siblings().removeClass('active');
+       // 位置修正
+       // 处理最后一个
+      if(($(this).index() + 1) * tabWidth > $('.tab-list-translateX').width() + Math.abs(getTranslateValue())) {
+        currentX -= ($(this).index() + 1) * tabWidth - $('.tab-list-translateX').width() - Math.abs(getTranslateValue())
+        $('.tab-list').css('transform', `translateX(${currentX}px)`)
+        setArrowDisabled()
+      } else if ( $(this).index() === Math.floor(Math.abs(getTranslateValue()) / tabWidth)) {
+        currentX += Math.abs(getTranslateValue()) % tabWidth
+        $('.tab-list').css('transform', `translateX(${currentX}px)`)
+        setArrowDisabled()
+      }
+    })
+
+    function getTranslateValue() {
+      var transformStr = $('.tab-list')[0].style.transform
+      return parseInt(transformStr.match(/-?\d+/g)[0])
+    }
+
+    function setArrowDisabled() {
+      if(getTranslateValue() === 0) {
+        $('.left').addClass('disabled')
+      } else {
+        $('.left').removeClass('disabled')
+      }
+
+      //判断右按钮是否可点击
+      if(getTranslateValue() === getRemainX()) {
+        $('.right').addClass('disabled')
+      } else {
+        $('.right').removeClass('disabled')
+      }
+    }
+
+    function addTab() {
+      $('.tab-item').removeClass('active')
+      $('.tab-list').append(`<div class="tab-item active">
+        新的页签
+        <img src="img/del.png" class="del" alt="" onclick="del">
+        </div>`)
+      currentX = $('.tab-list-translateX').width() - $('.tab-list')[0].scrollWidth
+      $('.tab-list').css('transform', `translateX(${currentX}px)`)
+      setArrowDisabled()
+    }
+
+    function getRemainX() {
+      return $('.tab-list-translateX').width() - $('.tab-list')[0].scrollWidth
+    }
+
+    function del() {
+    }
+  </script>
+</body>
+</html>
